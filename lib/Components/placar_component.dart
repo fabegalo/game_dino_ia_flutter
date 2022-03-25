@@ -1,7 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/palette.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/material.dart';
 import 'package:game_dino_ia/components/dino_component.dart';
 
 class PlacarComponent extends TextBoxComponent {

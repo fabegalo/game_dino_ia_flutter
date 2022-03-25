@@ -20,8 +20,6 @@ class DinoPosition extends PositionComponent with HasGameRef<DinoGame> {
 
   final DinoComponent _dino;
 
-  String _guiNumber(double number) => number.toStringAsFixed(2);
-
   @override
   Future<void>? onLoad() {
     _text = 'Pontos: ${_dino.score} \n'

@@ -1,9 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:game_dino_ia/dino_game.dart';
 import 'package:flame/sprite.dart';
 
@@ -22,9 +18,6 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
     required Vector2 size,
   }) : super(position: position, size: size, animations: {});
 
-  final _speed = 10;
-  final _animationSpeed = .1;
-  var _animationTime = 0.0;
   bool isJumping = false;
   double initialJumpVelocity = -25.5;
   double jumpVelocity = 0;

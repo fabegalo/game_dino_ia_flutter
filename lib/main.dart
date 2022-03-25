@@ -1,9 +1,6 @@
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-
 import 'dart:async';
 import 'package:game_dino_ia/dino_game.dart';
 import 'package:game_dino_ia/game_state.dart';
@@ -117,7 +114,7 @@ class _ModalGameState extends State<ModalGame> {
                 setState(() {});
               },
             )
-          : SizedBox(),
+          : const SizedBox(),
     );
 
     //return game.widget;

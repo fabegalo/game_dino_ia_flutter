@@ -4,10 +4,10 @@ import 'package:game_dino_ia/components/dino_component.dart';
 class RedeNeural {
   late int distancia;
   late int velocidade;
-  late DinoComponent
-      individuo; //8 genes -900 123 -090 -123 -1234 -1234 -3454 -0909
+  //8 genes -900 123 -090 -123 -1234 -1234 -3454 -0909
+  late DinoComponent individuo;
 
-  RedeNeural(DinoComponent dino) {
+  RedeNeural(dino) {
     individuo = dino;
   }
 

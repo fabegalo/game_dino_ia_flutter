@@ -1,25 +1,14 @@
 import 'dart:math';
-
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
-import 'package:flame/flame.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/sprite.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:game_dino_ia/components/background_component.dart';
 import 'package:game_dino_ia/components/dino_component.dart';
-import 'package:game_dino_ia/components/dino_position.dart';
 import 'package:game_dino_ia/components/enemy_component.dart';
-import 'package:game_dino_ia/components/pause_component.dart';
 import 'package:game_dino_ia/components/placar_component.dart';
 import 'package:game_dino_ia/game_state.dart';
-import 'package:game_dino_ia/redeNeural/redeNeural.dart';
 
 class DinoGame extends FlameGame
     with
@@ -41,7 +30,7 @@ class DinoGame extends FlameGame
   late int populacao;
   late double velocity;
   late double gravity;
-  var parallaxComponent;
+  late ParallaxComponent parallaxComponent;
 
   List<DinoComponent> dinos = [];
   List<EnemyComponent> enemys = [];
@@ -58,8 +47,8 @@ class DinoGame extends FlameGame
   }
 
   @override
-  bool onTapDown(int pointerId, TapDownInfo event) {
-    super.onTapDown(pointerId, event);
+  bool onTapDown(int pointerId, TapDownInfo info) {
+    super.onTapDown(pointerId, info);
     _dino.startJump(velocity);
     velocity++;
     parallaxComponent.parallax?.baseVelocity = Vector2(velocity * 10, 0);
@@ -105,8 +94,7 @@ class DinoGame extends FlameGame
 
     if (mortes == dinos.length && GameState.playState == PlayingState.playing) {
       removeAll(enemys);
-      restart();
-      //gameOver();
+      gameOver();
     }
 
     if (velocity >= 20) {

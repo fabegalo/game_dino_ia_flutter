@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/parallax.dart';
 import 'package:game_dino_ia/dino_game.dart';
 
 class BackgroundComponent extends SpriteComponent with HasGameRef<DinoGame> {

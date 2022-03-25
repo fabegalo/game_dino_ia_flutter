@@ -1,11 +1,5 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:game_dino_ia/ComponentesWidgets/checkbox.dart';
-import 'package:game_dino_ia/ComponentesWidgets/container_widget.dart';
-import 'package:game_dino_ia/dino_game.dart';
 import 'package:game_dino_ia/game_state.dart';
 
 /// By using the Flutter Widgets we can handle all non-game related UI through
@@ -62,7 +56,7 @@ class _ConfigGameState extends State<ConfigGame> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    //var size = MediaQuery.of(context).size;
 
     return Scaffold(
         appBar: AppBar(
@@ -94,7 +88,17 @@ class _ConfigGameState extends State<ConfigGame> {
 
                     _getValueContainer('Velocidade', 'velocidade'),
                     _getValueContainer('Gravidade', 'gravidade'),
-                    _getValueContainer('População', 'populacao')
+                    _getValueContainer('População', 'populacao'),
+
+                    _getButton('Restaurar Padrão', () {
+                      GameState.gravidade = 2;
+                      GameState.showDebugInfo = true;
+                      GameState.playSounds = true;
+                      GameState.hasCollision = true;
+                      GameState.populacao = 5;
+                      GameState.velocidade = 5;
+                      GameState.gravidade = 2;
+                    }),
 
                     // containerShadowHeightAndWidth(context,
                     //     const Text("Velocidade"), Colors.red, size, width),

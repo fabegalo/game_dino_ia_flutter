@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_dino_ia/dino_game.dart';
 import 'package:game_dino_ia/game_state.dart';

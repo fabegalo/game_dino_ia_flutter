@@ -1,17 +1,12 @@
 import 'dart:math';
-
+import 'dart:ui';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:game_dino_ia/RedeNeural/rede_neural.dart';
 import 'package:game_dino_ia/components/enemy_component.dart';
 import 'package:game_dino_ia/dino_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_dino_ia/game_state.dart';
-import 'package:game_dino_ia/redeNeural/redeNeural.dart';
 
 /// Descreve o estado de renderização do [DinoComponent].
 enum DinoState {
@@ -37,9 +32,9 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
     required Vector2 size,
   }) : super(position: position, size: size, animations: {});
 
-  final _speed = 10;
-  final _animationSpeed = .1;
-  var _animationTime = 0.0;
+  //final _speed = 10;
+  //final _animationSpeed = .1;
+  // _animationTime = 0.0;
   bool isJumping = false;
   double initialJumpVelocity = -25.5;
   double jumpVelocity = 10;
@@ -71,7 +66,7 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
 
     const stepTime = .3;
     const frameCount = 2;
-    final image;
+    Image image;
 
     if (!isBot) {
       image = await gameRef.images.load('spritesheet_player.png');
@@ -104,15 +99,15 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
     addHitbox(HitboxRectangle());
   }
 
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is RawKeyDownEvent) {
-      if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      } else {}
-    }
-    return true;
-  }
+  // @override
+  // bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  //   if (event is RawKeyDownEvent) {
+  //     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+  //     } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+  //     } else {}
+  //   }
+  //   return true;
+  // }
 
   // // Place holder, later we need to animate based on speed in a given direction.
   // void _setAnimationState() {
@@ -172,7 +167,7 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     // if (other is EnemyComponent &&
     //     GameState.playState == PlayingState.playing &&
     //     isDead == false) {
