@@ -64,7 +64,7 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
     position.y = groundYPos;
     cerebro = RedeNeural(this);
 
-    const stepTime = .3;
+    const stepTime = .2;
     const frameCount = 2;
     Image image;
 
@@ -87,7 +87,7 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
             image: await gameRef.images.load('spritesheet_flash.png'),
             columns: frameCount,
             rows: 1)
-        .createAnimation(row: 0, stepTime: stepTime);
+        .createAnimation(row: 0, stepTime: .1);
 
     animations = {
       DinoState.idle: idle,
@@ -96,7 +96,17 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
     };
 
     current = DinoState.running;
-    addHitbox(HitboxRectangle());
+
+    final shape = HitboxPolygon([
+      //X - Y
+      Vector2(0.4, 0.9), //Canto Inferior Direito
+      Vector2(1, -1), //Canto Superior Direito
+      Vector2(-1, -0.5), //Canto Superior Esquerdo
+      Vector2(-0.6, 0.9), //Canto Inferior Esquerdo
+    ]);
+
+    addHitbox(shape);
+    //addHitbox(HitboxCircle());
   }
 
   // @override
@@ -168,12 +178,12 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    // if (other is EnemyComponent &&
-    //     GameState.playState == PlayingState.playing &&
-    //     isDead == false) {
-    //   print(GameState.playState);
-    //   isDead = true;
-    // }
+    if (other is EnemyComponent &&
+        GameState.playState == PlayingState.playing &&
+        isDead == false &&
+        isBot == false) {
+      isDead = true;
+    }
   }
 
   @override

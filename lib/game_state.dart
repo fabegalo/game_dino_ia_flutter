@@ -27,6 +27,8 @@ class GameState {
   /// Show or hide debug infromation of flame.
   static bool showDebugInfo = true;
 
+  static bool autoRestart = false;
+
   ///Toggle sounds
   static bool playSounds = true;
 

@@ -54,6 +54,12 @@ class _ConfigGameState extends State<ConfigGame> {
     });
   }
 
+  void onChangeAutoRestartCheckbox(bool newValue) {
+    setStateIfMounted(() {
+      GameState.autoRestart = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //var size = MediaQuery.of(context).size;
@@ -85,6 +91,8 @@ class _ConfigGameState extends State<ConfigGame> {
                         onChangeDebugCheckbox),
                     _getCheckBoxOption("Manter Colisão", GameState.hasCollision,
                         onChangeDebugCheckbox),
+                    _getCheckBoxOption("Auto Restart", GameState.autoRestart,
+                        onChangeAutoRestartCheckbox),
 
                     _getValueContainer('Velocidade', 'velocidade'),
                     _getValueContainer('Gravidade', 'gravidade'),
@@ -98,6 +106,7 @@ class _ConfigGameState extends State<ConfigGame> {
                       GameState.populacao = 5;
                       GameState.velocidade = 5;
                       GameState.gravidade = 2;
+                      setStateIfMounted(() {});
                     }),
 
                     // containerShadowHeightAndWidth(context,

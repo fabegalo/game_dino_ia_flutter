@@ -6,23 +6,34 @@ class PlacarComponent extends TextBoxComponent {
 
   PlacarComponent(this.dinos);
 
-  // @override
-  // Future<void> onLoad() async {
-  //   text = 'Placar:\n';
+  @override
+  Future<void> onLoad() async {
+    text = 'Placar:\n';
 
-  //   await super.onLoad();
-  // }
+    position = Vector2(10, 10);
+    size = Vector2(100, 100);
+
+    await super.onLoad();
+  }
 
   @override
   void update(double dt) {
     text = 'Placar:\n';
+
+    var count = 0;
 
     // dinos.forEach((element) {
     //   text = text + element.score.toString();
     // });
 
     for (DinoComponent d in dinos) {
-      text += d.score.toString() + '\n';
+      if (d.isBot) {
+        count++;
+        text += 'Dino' + count.toString() + ": " + d.score.toString() + '\n';
+      } else {
+        count++;
+        text += 'Você' + count.toString() + ": " + d.score.toString() + '\n';
+      }
     }
 
     super.update(dt);

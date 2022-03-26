@@ -31,11 +31,14 @@ class DinoGame extends FlameGame
   late double velocity;
   late double gravity;
   late ParallaxComponent parallaxComponent;
+  int lastScore = 0;
 
   List<DinoComponent> dinos = [];
   List<EnemyComponent> enemys = [];
 
   static final fpsTextConfig = TextPaint();
+
+  static final placar = TextPaint();
 
   void onOverlayChanged() {
     if (overlays.isActive('pause')) {
@@ -50,8 +53,6 @@ class DinoGame extends FlameGame
   bool onTapDown(int pointerId, TapDownInfo info) {
     super.onTapDown(pointerId, info);
     _dino.startJump(velocity);
-    velocity++;
-    parallaxComponent.parallax?.baseVelocity = Vector2(velocity * 10, 0);
     return true;
   }
 
@@ -75,7 +76,23 @@ class DinoGame extends FlameGame
     super.render(canvas);
     final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
     fpsTextConfig.render(
-        canvas, 'FPS:' + fpsCount.toString(), Vector2(size.x - 130, 20));
+        canvas,
+        'FPS:' + fpsCount.toString() + "\nVelo: " + velocity.toString(),
+        Vector2(size.x - 130, 20));
+
+    var text = 'Placar:\n';
+    var count = 0;
+    for (DinoComponent d in dinos) {
+      if (d.isBot) {
+        count++;
+        text += 'Dino  ' + count.toString() + ": " + d.score.toString() + '\n';
+      } else {
+        count++;
+        text += 'Você ' + count.toString() + ": " + d.score.toString() + '\n';
+      }
+    }
+
+    placar.render(canvas, text, Vector2(20, 20));
   }
 
   @override
@@ -94,14 +111,42 @@ class DinoGame extends FlameGame
 
     if (mortes == dinos.length && GameState.playState == PlayingState.playing) {
       removeAll(enemys);
-      gameOver();
+      if (GameState.autoRestart) {
+        restart();
+      } else {
+        gameOver();
+      }
     }
+
+    gerenciaVelocidade();
 
     if (velocity >= 20) {
       velocity = 20;
     }
 
     super.update(dt);
+  }
+
+  void gerenciaVelocidade() {
+    if (dinos.isEmpty) {
+      return;
+    }
+
+    final score = dinos.reduce((max, element) {
+      if (max.score > element.score) {
+        return max;
+      } else {
+        return element;
+      }
+    });
+
+    int highestScore = score.score;
+
+    if (highestScore > lastScore + 500) {
+      lastScore = highestScore;
+      velocity++;
+      parallaxComponent.parallax?.baseVelocity = Vector2(velocity * 10, 0);
+    }
   }
 
   void spawnEnemy() async {
@@ -112,7 +157,7 @@ class DinoGame extends FlameGame
     var enemy = EnemyComponent(
         position:
             size * (random.nextDouble() * ((maximum - minimum)) + minimum),
-        size: Vector2(20, 70));
+        size: Vector2(30, 70));
 
     enemys.add(enemy);
     await add(enemy);
@@ -175,10 +220,10 @@ class DinoGame extends FlameGame
     await add(_dino);
     //await add(DinoPosition(_dino));
 
-    await add(PlacarComponent(dinos));
+    //await add(PlacarComponent(dinos));
 
     for (var x = 0; x < 2; x++) {
-      enemys.add(EnemyComponent(position: size * 1.2, size: Vector2(20, 70)));
+      enemys.add(EnemyComponent(position: size * 1.2, size: Vector2(30, 70)));
     }
 
     for (EnemyComponent enemy in enemys) {

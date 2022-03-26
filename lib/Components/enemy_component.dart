@@ -28,7 +28,7 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
 
   double get groundYPos {
     if (gameRef.size.y > gameRef.size.x) {
-      return gameRef.size.y - 110;
+      return gameRef.size.y - 150;
     } else {
       return gameRef.size.y - 85;
     }
@@ -41,15 +41,16 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
     position.y = groundYPos;
 
     const stepTime = .3;
-    const frameCount = 2;
-    final image = await gameRef.images.load('spritesheet.png');
+    const frameCount = 1;
+    final image = await gameRef.images.load('spritesheet_enemy.png');
+
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: frameCount,
       rows: 1,
     );
 
-    final idle = sheet.createAnimation(row: 1, stepTime: stepTime);
+    final idle = sheet.createAnimation(row: 0, stepTime: stepTime);
     //final running = sheet.createAnimation(row: 0, stepTime: stepTime);
 
     animations = {
@@ -58,7 +59,7 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
     };
 
     current = EnemyState.idle;
-    addHitbox(HitboxCircle());
+    addHitbox(HitboxRectangle());
   }
 
   @override
