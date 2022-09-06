@@ -7,16 +7,14 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:game_dino_ia/components/dino_component.dart';
 import 'package:game_dino_ia/components/enemy_component.dart';
-import 'package:game_dino_ia/components/placar_component.dart';
 import 'package:game_dino_ia/game_state.dart';
 
 class DinoGame extends FlameGame
     with
-        HasCollidables,
         HasTappables,
         HasKeyboardHandlerComponents,
         HasDraggables,
-        FPSCounter {
+        HasCollisionDetection {
   late DinoComponent _dino;
 
   Function refresher;
@@ -61,24 +59,21 @@ class DinoGame extends FlameGame
 
   @override
   void onMount() {
-    overlays.addListener(onOverlayChanged);
+    onOverlayChanged();
+    //overlays.addListener(onOverlayChanged);
     super.onMount();
   }
 
   @override
   void onRemove() {
-    overlays.removeListener(onOverlayChanged);
+    onOverlayChanged();
+    //overlays.removeListener(onOverlayChanged);
     super.onRemove();
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
-    fpsTextConfig.render(
-        canvas,
-        'FPS:' + fpsCount.toString() + "\nVelo: " + velocity.toString(),
-        Vector2(size.x - 130, 20));
 
     var text = 'Placar:\n';
     var count = 0;
@@ -173,19 +168,24 @@ class DinoGame extends FlameGame
   void gameOver() {
     GameState.playState = PlayingState.lost;
     overlays.add('pause');
+    onOverlayChanged();
   }
 
   void restart() async {
-    removeAll(enemys);
+    //removeAll(enemys);
     removeAll(dinos);
     _removeAnyOverlay();
-    children.removeAll(children);
+    //children.removeAll(children);
+
+    removeAll(children);
 
     await inicializaBotsAndPlayer();
     GameState.playState = PlayingState.playing;
   }
 
   Future<void> inicializaBotsAndPlayer() async {
+    add(FpsTextComponent(position: Vector2(size.x - 130, 20)));
+
     dinos = [];
     enemys = [];
     mortes = 0;

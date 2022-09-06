@@ -12,7 +12,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.setPortrait();
   //await Flame.device.setOrientation(DeviceOrientation.portraitUp);
-
   runApp(const MyApp());
 }
 
@@ -110,6 +109,8 @@ class _ModalGameState extends State<ModalGame> {
                   }
                   game.overlays.add('pause');
                 }
+
+                game.onOverlayChanged();
 
                 setState(() {});
               },

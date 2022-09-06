@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:game_dino_ia/dino_game.dart';
@@ -11,7 +12,7 @@ enum EnemyState {
 
 /// A component that renders the Rocket with the different states.
 class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
-    with HasHitboxes, Collidable, HasGameRef<DinoGame> {
+    with HasGameRef<DinoGame>, CollisionCallbacks {
   /// Create a new Dino component at the given [position].
   EnemyComponent({
     required Vector2 position,
@@ -28,9 +29,9 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
 
   double get groundYPos {
     if (gameRef.size.y > gameRef.size.x) {
-      return gameRef.size.y - 150;
+      return gameRef.size.y / 1.3;
     } else {
-      return gameRef.size.y - 85;
+      return gameRef.size.y / 1.42;
     }
   }
 
@@ -59,7 +60,7 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
     };
 
     current = EnemyState.idle;
-    addHitbox(HitboxRectangle());
+    add(RectangleHitbox());
   }
 
   @override
@@ -73,7 +74,7 @@ class EnemyComponent extends SpriteAnimationGroupComponent<EnemyState>
         isOffScreen = true;
         isDead = true;
         removeFromParent();
-        remove(this);
+        //remove(this);
       }
     }
 

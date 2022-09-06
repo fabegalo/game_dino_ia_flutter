@@ -67,19 +67,22 @@ class _PauseMenuState extends State<PauseMenu> {
                   ),
                 ),
                 if (GameState.playState == PlayingState.paused)
-                  _getButton(
-                      'Resume', () => widget.game.overlays.remove('pause')),
+                  _getButton('Resume', () {
+                    widget.game.overlays.remove('pause');
+                    widget.game.onOverlayChanged();
+                  }),
                 _getButton(
                   'Restart',
                   () {
                     widget.game.overlays.remove('pause');
                     widget.game.restart();
+                    widget.game.onOverlayChanged();
                   },
                 ),
                 _getButton(
                   'Ir para o Menu',
                   () {
-                    widget.game.remove(widget.game);
+                    //widget.game.remove(widget.game);
                     GameState.playState = PlayingState.playing;
                     Navigator.pushNamedAndRemoveUntil(
                         context, "/menu", (route) => false);

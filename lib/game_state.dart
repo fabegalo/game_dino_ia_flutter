@@ -25,7 +25,7 @@ class GameState {
   static int? lastScore;
 
   /// Show or hide debug infromation of flame.
-  static bool showDebugInfo = true;
+  static bool showDebugInfo = false;
 
   static bool autoRestart = false;
 

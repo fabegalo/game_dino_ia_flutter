@@ -1,12 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 import 'package:game_dino_ia/RedeNeural/rede_neural.dart';
 import 'package:game_dino_ia/components/enemy_component.dart';
 import 'package:game_dino_ia/dino_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_dino_ia/game_state.dart';
+import 'package:flame/palette.dart';
 
 /// Descreve o estado de renderização do [DinoComponent].
 enum DinoState {
@@ -25,7 +26,7 @@ enum DinoState {
 
 /// A component that renders the Rocket with the different states.
 class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
-    with HasHitboxes, Collidable, HasGameRef<DinoGame> {
+    with CollisionCallbacks, HasGameRef<DinoGame> {
   /// Create a new Dino component at the given [position].
   DinoComponent({
     required Vector2 position,
@@ -50,9 +51,9 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
 
   double get groundYPos {
     if (gameRef.size.y > gameRef.size.x) {
-      return gameRef.size.y - 170;
+      return gameRef.size.yx.y / 0.6;
     } else {
-      return gameRef.size.y - 140;
+      return gameRef.size.y / 1.5;
     }
   }
 
@@ -97,15 +98,50 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
 
     current = DinoState.running;
 
-    final shape = HitboxPolygon([
+    // final shape = PolygonHitbox([
+    //   //X - Y
+    //   Vector2(0.4, 0.9), //Canto Inferior Direito
+    //   Vector2(1, -1), //Canto Superior Direito
+    //   Vector2(-1, -0.5), //Canto Superior Esquerdo
+    //   Vector2(-0.6, 0.9), //Canto Inferior Esquerdo
+    // ]);
+
+    // final shape = PolygonComponent.relative([
+    //   //X - Y
+    //   Vector2(0.4, 0.9), //Canto Inferior Direito
+    //   Vector2(1, -1), //Canto Superior Direito
+    //   Vector2(-1, -0.5), //Canto Superior Esquerdo
+    //   Vector2(-0.6, 0.9), //Canto Inferior Esquerdo
+    // ], parentSize: size, paint: Paint());
+
+    final shape = PolygonHitbox.relative([
       //X - Y
       Vector2(0.4, 0.9), //Canto Inferior Direito
       Vector2(1, -1), //Canto Superior Direito
       Vector2(-1, -0.5), //Canto Superior Esquerdo
       Vector2(-0.6, 0.9), //Canto Inferior Esquerdo
-    ]);
+    ], parentSize: size);
 
-    addHitbox(shape);
+    add(shape);
+
+    // final hitboxPaint = BasicPalette.white.paint()
+    //   ..style = PaintingStyle.stroke;
+
+    // add(
+    //   PolygonHitbox.relative(
+    //     [
+    //       Vector2(0.0, -1.0),
+    //       Vector2(-1.0, -0.1),
+    //       Vector2(-0.2, 0.4),
+    //       Vector2(0.2, 0.4),
+    //       Vector2(1.0, -0.1),
+    //     ],
+    //     parentSize: size,
+    //   )
+    //     ..paint = hitboxPaint
+    //     ..renderShape = true,
+    // );
+
     //addHitbox(HitboxCircle());
   }
 
@@ -176,23 +212,36 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
     }
   }
 
+  // @override
+  // void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+  //   super.onCollisionStart(intersectionPoints, other);
+  //   flipVertically();
+
+  //   print('bateu');
+  //   print(other);
+  // }
+
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is EnemyComponent &&
         GameState.playState == PlayingState.playing &&
         isDead == false &&
         isBot == false) {
       isDead = true;
     }
+
+    super.onCollision(intersectionPoints, other);
   }
 
   @override
-  void onCollisionEnd(Collidable other) {
+  void onCollisionEnd(PositionComponent other) {
     if (other is EnemyComponent &&
         GameState.playState == PlayingState.playing &&
         isDead == false) {
       isDead = true;
     }
+
+    super.onCollisionEnd(other);
   }
 
   void pensa(double velocidade, List<EnemyComponent> enemys) {
@@ -237,7 +286,7 @@ class DinoComponent extends SpriteAnimationGroupComponent<DinoState>
   void update(double dt) {
     if (isDead && isOffScreen) {
       removeFromParent();
-      remove(this);
+      //remove(this);
       return;
     }
 
